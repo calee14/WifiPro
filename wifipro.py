@@ -1,7 +1,31 @@
 from scapy.all import *
+import argsparse
 import time
+import os
+import sys
 import uuid 
 
+def _enable_linux_iproute():
+	"""
+	Enables IP route ( IP Forward ) in linux-based distro
+	"""
+	file_path = "/proc/sys/net/ipv4/ip_forward"
+	with open(file_path) as f:
+		if f.read() == 1:
+			# already enabled
+			return
+	with open(file_path, "w") as f:
+		print(1, file=f)
+
+def enable_ip_route(verbose=True):
+	"""
+	Enables IP forwarding
+	"""
+	if verbose:
+		print("[!] Enabling IP Routing...")
+	_enable_linux_iproute()
+	if verbose:
+		print("[!] IP Routing enabled.")
 def get_mac_address():
 	import uuid
 	# after each 2 digits, join elements of getnode().
