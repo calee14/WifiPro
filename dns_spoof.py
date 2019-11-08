@@ -62,7 +62,6 @@ def modify_packet(packet):
 	return packet
 
 if __name__ == "__main__":
-if __name__ == "__main__":
     QUEUE_NUM = 0
     # insert the iptables FORWARD rule
     os.system("iptables -I FORWARD -j NFQUEUE --queue-num {}".format(QUEUE_NUM))
