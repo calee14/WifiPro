@@ -20,4 +20,4 @@ sudo python dns_spoof
 
 ## Requirements 
 
-- Better used with Linux.
+- Better used with Linux. Although with some finessing and some luck one should be able to get it working on MacOS and Windows.
