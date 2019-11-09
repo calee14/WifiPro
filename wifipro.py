@@ -9,13 +9,15 @@ def _enable_linux_iproute():
 	"""
 	Enables IP route ( IP Forward ) in linux-based distro
 	"""
-	file_path = "/proc/sys/net/ipv4/ip_forward"
-	with open(file_path) as f:
-		if f.read() == 1:
-			# already enabled
-			return
-	with open(file_path, "w") as f:
-		print(1, file=f)
+	_FORWARDING = 1
+	os.system("sudo sysctl -w net.inet.ip.forwarding={}".format(_FORWARDING))
+
+def _disable_linux_iproute():
+	"""
+	Disables IP route ( IP Forward ) in linux-based distro
+	"""
+	_FORWARDING = 0
+	os.system("sudo sysctl -w net.inet.ip.forwarding={}".format(_FORWARDING))
 
 def enable_ip_route(verbose=True):
 	"""
