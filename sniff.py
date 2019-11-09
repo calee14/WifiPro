@@ -28,7 +28,7 @@ def process_packet(packet):
 	if packet.haslayer(HTTPRequest):
 		# if this packet is an HTTP Request
 		# get the requested URL
-		url = packet[HTTPRequest].HOST.decode() + packet[HTTPRequest].Path.decode()
+		url = packet[HTTPRequest].Host.decode() + packet[HTTPRequest].Path.decode()
 		# get the requester's IP Address
 		ip = packet[IP].src
 		# get the request method
