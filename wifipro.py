@@ -25,7 +25,7 @@ def enable_ip_route(verbose=True):
 	"""
 	if verbose:
 		print("[!] Enabling IP Routing...")
-	# _enable_linux_iproute()
+	_enable_linux_iproute()
 	if verbose:
 		print("[!] IP Routing enabled.")
 
