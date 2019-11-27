@@ -129,13 +129,3 @@ def sendPackets(gateway_ip, target_ip, this_mac_address, target_mac_address):
 		sendp(x=packet, verbose=True)
 
 	broadcast()
-
-# try:
-# 	while True:
-# 		sendPackets("1.1.1.1", "10.1.9.135", get_mac_address(), "e0:ac:cb:71:d5:c6")
-# except KeyboardInterrupt:
-# 	rearp = 0
-# 	while rearp != 10:
-# 		sendPackets("10.1.9.135", "10.1.9.135", get_mac_address(), "e0:ac:cb:71:d5:c6")
-# 		time.sleep(0.1)
-# 		rearp += 1
